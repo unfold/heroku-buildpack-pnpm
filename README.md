@@ -5,5 +5,5 @@ This buildpack enables use of `pnpm` on heroku.
 ## Using the heroku buildpack
 
 ```shell
-heroku buildpaks:set https://github.com/unfoldoslo/heroku-buildpack-pnpm
+heroku buildpaks:set https://github.com/unfold/heroku-buildpack-pnpm
 ```
