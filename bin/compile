@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+### Configure environment
+
+set -o errexit  # always exit on error
+set -o pipefail # don't ignore exit codes when piping output
+set -o nounset  # fail on unset variables
+unset GIT_DIR   # Avoid GIT_DIR leak from previous build steps
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+BUILDPACK_DIR=$(
+  cd "$(dirname "${0:-}")" || exit
+  cd ..
+  pwd
+)
+BIN_DIR="$BUILD_DIR/.heroku/bin"
+DEFAULT_NODE_VERSION=16
+
+mkdir -p "$BUILD_DIR/.heroku/bin/"
+
+cd "$BUILD_DIR"
+
+### Load Dependencies
+source "$BUILDPACK_DIR/lib/environment.sh"
+source "$BUILDPACK_DIR/lib/json.sh"
+source "$BUILDPACK_DIR/lib/heroku.sh"
+
+### Create and export environment variables
+create_env() {
+  write_profile "$BUILDPACK_DIR" "$BUILD_DIR"
+  export_env_dir "$ENV_DIR"
+}
+
+create_env
+
+### Install binaries needed for build
+install_binaries() {
+  local node_engine=$(read_json "$BUILD_DIR/package.json" ".engines.node")
+  local npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
+
+  curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$BIN_DIR" --skip-shell
+  export PATH=$BUILD_DIR/.heroku/bin:$PATH
+  export NODE_OPTIONS=--max_old_space_size=4096
+
+  eval "$(fnm env)"
+
+  if [ -n "$node_engine" ]; then
+    echo "-----> Install nodejs version $node_engine from package.json"
+    fnm install "$node_engine"
+  else
+    echo "-----> Install nodejs version $DEFAULT_NODE_VERSION"
+    fnm install $DEFAULT_NODE_VERSION
+  fi
+
+  if [ -n "$npm_engine" ]; then
+    echo "-----> Install npm $npm_engine"
+    npm install -g "$npm_engine"
+  else
+    echo "-----> Use default npm version"
+    npm -v
+  fi
+
+  echo "-----> Install pnpm"
+  curl -sL https://unpkg.com/@pnpm/self-installer | node
+  pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
+
+  echo "-----> Install pnpm"
+  pnpm install
+}
+
+install_binaries
+
+echo "-----> Run prebuild"
+run_prebuild "$BUILD_DIR"
+
+echo "-----> Run build"
+run_build "$BUILD_DIR"
