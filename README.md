@@ -7,3 +7,5 @@ This buildpack enables use of `pnpm` on heroku.
 ```shell
 heroku buildpaks:set https://github.com/unfold/heroku-buildpack-pnpm
 ```
+
+The buildpack will install `npm` into the environment. It will read the `package.json` file to get the NPM version to use (defaults to version 16).
