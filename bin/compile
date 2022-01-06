@@ -48,10 +48,10 @@ install_binaries() {
   eval "$(fnm env)"
 
   if [ -n "$node_engine" ]; then
-    echo "-----> Install nodejs version: $node_engine from package.json"
+    echo "-----> Install nodejs version-d $node_engine from package.json"
     fnm install "$node_engine"
   else
-    echo "-----> Install nodejs version $DEFAULT_NODE_VERSION"
+    echo "-----> Install nodejs version-d $DEFAULT_NODE_VERSION"
     fnm install $DEFAULT_NODE_VERSION
   fi
 
