@@ -22,6 +22,7 @@ DEFAULT_NODE_VERSION=16
 mkdir -p "$BUILD_DIR/.heroku/bin/"
 
 export PATH="$BUILD_DIR/.heroku/node/bin:$BIN_DIR:$PATH"
+echo "-----> BIN_DIR: $BIN_DIR"
 
 cd "$BUILD_DIR"
 
