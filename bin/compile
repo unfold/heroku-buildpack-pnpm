@@ -21,6 +21,8 @@ DEFAULT_NODE_VERSION=16
 
 mkdir -p "$BUILD_DIR/.heroku/bin/"
 
+export PATH="$BUILD_DIR/.heroku/node/bin:$BIN_DIR:$PATH"
+
 cd "$BUILD_DIR"
 
 ### Load Dependencies
@@ -44,7 +46,6 @@ install_binaries() {
   echo "-----> Install fnm to $BIN_DIR"
 
   curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$BIN_DIR" --skip-shell
-  export PATH="$BUILD_DIR/.heroku/node/bin:$BIN_DIR:$PATH"
   export NODE_OPTIONS=--max_old_space_size=4096
 
   eval "$(fnm env)"
