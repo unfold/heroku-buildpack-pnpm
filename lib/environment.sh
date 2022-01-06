@@ -22,7 +22,7 @@ write_profile() {
   mkdir -p "$build_dir/.profile.d"
   cp "$bp_dir"/profile/* "$build_dir/.profile.d/"
   
-  echo "Write profile path: \"$build_dir/.heroku/node/bin:\$PATH:$build_dir/node_modules/.bin\""
-  echo "export PATH=\"$build_dir/.heroku/node/bin:\$PATH:$build_dir/node_modules/.bin\"" > "$bp_dir/export"
-  echo "export NODE_HOME=\"$build_dir/.heroku/node\"" >> "$bp_dir/export"
+  echo "Write profile path to $bp_dir/export.sh: \"$build_dir/.heroku/node/bin:\$PATH:$build_dir/node_modules/.bin\""
+  echo "export PATH=\"$build_dir/.heroku/node/bin:\$PATH:$build_dir/node_modules/.bin\"" > "$bp_dir/export.sh"
+  echo "export NODE_HOME=\"$build_dir/.heroku/node\"" >> "$bp_dir/export.sh"
 }
