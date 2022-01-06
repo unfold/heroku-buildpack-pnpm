@@ -21,4 +21,7 @@ write_profile() {
   local build_dir="$2"
   mkdir -p "$build_dir/.profile.d"
   cp "$bp_dir"/profile/* "$build_dir/.profile.d/"
+  
+  echo "export PATH=\"$build_dir/.heroku/node/bin:\$PATH:$build_dir/node_modules/.bin\"" > "$bp_dir/export"
+  echo "export NODE_HOME=\"$build_dir/.heroku/node\"" >> "$bp_dir/export"
 }

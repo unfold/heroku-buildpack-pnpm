@@ -23,6 +23,7 @@ mkdir -p "$BUILD_DIR/.heroku/bin/"
 
 export PATH="$BUILD_DIR/.heroku/node/bin:$BIN_DIR:$PATH"
 echo "-----> BIN_DIR: $BIN_DIR"
+echo "-----> PATH IN BUILD: $PATH"
 
 cd "$BUILD_DIR"
 
