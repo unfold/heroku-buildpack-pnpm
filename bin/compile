@@ -41,8 +41,10 @@ install_binaries() {
   local node_engine=$(read_json "$BUILD_DIR/package.json" ".engines.node")
   local npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
 
+  echo "-----> Install fnm to $BIN_DIR"
+
   curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$BIN_DIR" --skip-shell
-  export PATH="$BUILD_DIR/.heroku/node/bin:$BUILD_DIR/.heroku/bin:$PATH"
+  export PATH="$BUILD_DIR/.heroku/node/bin:$BIN_DIR:$PATH"
   export NODE_OPTIONS=--max_old_space_size=4096
 
   eval "$(fnm env)"
