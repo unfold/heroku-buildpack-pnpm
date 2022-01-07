@@ -1,0 +1,12 @@
+[buildpack]
+name = "Node.js"
+
+  [publish.Ignore]
+  files = [
+      ".circle/",
+      ".github/",
+      "etc/",
+      "spec/",
+      "test/",
+      "makefile"
+  ]

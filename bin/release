@@ -4,5 +4,5 @@
 cat << EOF
 addons: []
 default_process_types:
-  web: pnpm run start
+  web: npm start
 EOF

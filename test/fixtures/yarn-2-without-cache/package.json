@@ -1,0 +1,12 @@
+{
+  "name": "yarn-2-without-cache",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.16.4"
+  },
+  "devDependencies": {
+    "debug": "^4.1.1"
+  }
+}
