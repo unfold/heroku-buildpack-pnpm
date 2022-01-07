@@ -1,8 +1,10 @@
-# Heroku Buildpack for Node.js
+# PNPM compatible Buildpack for Heroku and Node.js
 
 ![nodejs](https://cloud.githubusercontent.com/assets/51578/13712672/efdf2a40-e792-11e5-82ef-492478cbc0dc.png)
 
-This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
+This is an unofficial for of the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
+
+It supports pnpm in addition to yarn/npm. As long as the root of your project contains a `pnpm-lock.yaml` file, PNPM will be used to install all dependencies.
 
 [![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-nodejs/tree/main.svg?style=svg)](https://circleci.com/gh/heroku/heroku-buildpack-nodejs)
 
