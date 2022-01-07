@@ -1,14 +1,14 @@
 # PNPM compatible Buildpack for Heroku and Node.js
 
-![nodejs](https://cloud.githubusercontent.com/assets/51578/13712672/efdf2a40-e792-11e5-82ef-492478cbc0dc.png)
-
 This is an unofficial for of the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
 
 It supports pnpm in addition to yarn/npm. As long as the root of your project contains a `pnpm-lock.yaml` file, PNPM will be used to install all dependencies.
 
-[![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-nodejs/tree/main.svg?style=svg)](https://circleci.com/gh/heroku/heroku-buildpack-nodejs)
-
 ## Documentation
+
+This will run a regular `pnpm install` in the Heroku environment. It will NOT install dev depdencies.
+
+The pnpm store will automatically be cached, you do not need to specify additional cache directories manually.
 
 For more information about using this Node.js buildpack on Heroku, see these Dev Center articles:
 
@@ -21,12 +21,12 @@ For more general information about buildpacks on Heroku:
 - [Buildpacks](https://devcenter.heroku.com/articles/buildpacks)
 - [Buildpack API](https://devcenter.heroku.com/articles/buildpack-api)
 
-## Using the Heroku Node.js buildpack
+## Using the PNPM Heroku Node.js buildpack
 
 It's suggested that you use the latest version of the release buildpack. You can set it using the `heroku-cli`.
 
 ```sh
-heroku buildpacks:set heroku/nodejs
+heroku buildpacks:set https://github.com/unfold/heroku-buildpack-pnpm
 ```
 
 Your builds will always used the latest published release of the buildpack.
@@ -34,24 +34,12 @@ Your builds will always used the latest published release of the buildpack.
 If you need to use the git url, you can use the `latest` tag to make sure you always have the latest release. **The `main` branch will always have the latest buildpack updates, but it does not correspond with a numbered release.**
 
 ```sh
-heroku buildpacks:set https://github.com/heroku/heroku-buildpack-nodejs#latest -a my-app
-```
-
-## Locking to a buildpack version
-
-Even though it's suggested to use the latest release, you may want to lock dependencies - including buildpacks - to a specific version.
-
-First, find the version you want from
-[the list of buildpack versions](https://github.com/heroku/heroku-buildpack-nodejs/releases).
-Then, specify that version with `buildpacks:set`:
-
-```
-heroku buildpacks:set https://github.com/heroku/heroku-buildpack-nodejs#v176 -a my-app
+heroku buildpacks:set https://github.com/unfold/heroku-buildpack-pnpm#latest -a my-app
 ```
 
 ### Chain Node with multiple buildpacks
 
-This buildpack automatically exports node, npm, and any node_modules binaries
+This buildpack automatically exports node, pnpm, npm, and any node_modules binaries
 into the `$PATH` for easy use in subsequent buildpacks.
 
 ## Feedback
