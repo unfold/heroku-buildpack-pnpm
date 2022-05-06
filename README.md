@@ -31,6 +31,8 @@ heroku buildpacks:set https://github.com/unfold/heroku-buildpack-pnpm
 
 Your builds will always used the latest published release of the buildpack.
 
+You can control the version of pnpm but setting a `PNPM_VERSION` environment variable on the app. For example `PNPM_VERSION=6.32.11`.
+
 If you need to use the git url, you can use the `latest` tag to make sure you always have the latest release. **The `main` branch will always have the latest buildpack updates, but it does not correspond with a numbered release.**
 
 ```sh
