@@ -223,7 +223,7 @@ install_bins() {
   if $PNPM; then
     meta_set "build-step" "install-pnpm"
     echo "-----> Install pnpm"
-    curl -sL https://unpkg.com/@pnpm/self-installer | node
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
   fi
 
