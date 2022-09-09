@@ -222,6 +222,7 @@ install_bins() {
 
   if $PNPM; then
     meta_set "build-step" "install-pnpm"
+    echo ""
     echo "-----> Install pnpm"
     curl -sL https://unpkg.com/@pnpm/self-installer | node
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
@@ -363,7 +364,7 @@ prune_devdependencies() {
   if $YARN || $YARN_2; then
     yarn_prune_devdependencies "$BUILD_DIR" "$YARN_CACHE_FOLDER"
   elif $PNPM; then
-    echo "Not pruning when using pnpm"
+    pnpm_prune_devdependencies "$BUILD_DIR"
   else
     npm_prune_devdependencies "$BUILD_DIR"
   fi
