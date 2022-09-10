@@ -1,12 +1,12 @@
 # PNPM compatible Buildpack for Heroku and Node.js
 
-This is an unofficial buildpack for the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps. This version was forked from https://github.com/unfold/heroku-buildpack-pnpm to fix issues with `devDependencies` when building Typescript projects.
+This is an unofficial buildpack for the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
 
 It supports pnpm in addition to yarn/npm. As long as the root of your project contains a `pnpm-lock.yaml` file, PNPM will be used to install all dependencies.
 
 ## Documentation
 
-This will run a regular `pnpm install` in the Heroku environment. It temporarily overrides the NODE_ENV variable during this step so it will install the `devDependencies`, and then it runs `pnpm prune --prod` during the prune step to remove the `devDependencies`.
+This will run a regular `pnpm install` in the Heroku environment. It will install `devDependencies` initially, regardless of the NODE_ENV setting, and then runs `pnpm prune --prod` during the prune step to remove the `devDependencies`.
 
 The pnpm store will automatically be cached, you do not need to specify additional cache directories manually.
 
@@ -26,7 +26,7 @@ For more general information about buildpacks on Heroku:
 It's suggested that you use the latest version of the release buildpack. You can set it using the `heroku-cli`.
 
 ```sh
-heroku buildpacks:set https://github.com/TheSecurityDev/heroku-buildpack-nodejs-pnpm
+heroku buildpacks:set https://github.com/unfold/heroku-buildpack-pnpm
 ```
 
 Your builds will always used the latest published release of the buildpack.
@@ -36,7 +36,7 @@ You can control the version of pnpm but setting a `PNPM_VERSION` environment var
 If you need to use the git url, you can use the `latest` tag to make sure you always have the latest release. **The `main` branch will always have the latest buildpack updates, but it does not correspond with a numbered release.**
 
 ```sh
-heroku buildpacks:set https://github.com/TheSecurityDev/heroku-buildpack-nodejs-pnpm#latest -a my-app
+heroku buildpacks:set https://github.com/unfold/heroku-buildpack-pnpm#latest -a my-app
 ```
 
 ### Chain Node with multiple buildpacks
