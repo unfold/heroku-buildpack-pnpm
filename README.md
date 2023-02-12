@@ -1,12 +1,12 @@
 # PNPM compatible Buildpack for Heroku and Node.js
 
-This is an unofficial for of the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
+This is an unofficial buildpack for the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Node.js apps.
 
 It supports pnpm in addition to yarn/npm. As long as the root of your project contains a `pnpm-lock.yaml` file, PNPM will be used to install all dependencies.
 
 ## Documentation
 
-This will run a regular `pnpm install` in the Heroku environment. It will NOT install dev depdencies.
+This will run a regular `pnpm install` in the Heroku environment. It will install `devDependencies` initially, regardless of the NODE_ENV setting, and then runs `pnpm prune --prod` during the prune step to remove the `devDependencies`.
 
 The pnpm store will automatically be cached, you do not need to specify additional cache directories manually.
 
