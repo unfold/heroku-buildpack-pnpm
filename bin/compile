@@ -191,6 +191,7 @@ install_bins() {
   node_engine=$(read_json "$BUILD_DIR/package.json" ".engines.node")
   npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
   yarn_engine=$(read_json "$BUILD_DIR/package.json" ".engines.yarn")
+  pnpm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.pnpm")
 
   if [[ "$YARN_2" == "true" && -n "$yarn_engine" ]]; then
     warn "You don't need to specify Yarn engine. Heroku will install the latest Yarn 1.x, so that per project version can be used. More information here: https://yarnpkg.com/getting-started/install#global-install"
@@ -200,6 +201,7 @@ install_bins() {
   meta_set "node-version-request" "$node_engine"
   meta_set "npm-version-request" "$npm_engine"
   meta_set "yarn-version-request" "$yarn_engine"
+  meta_set "pnpm-version-request" "$pnpm_engine"
 
   echo "engines.node (package.json):  ${node_engine:-unspecified}"
   echo "engines.npm (package.json):   ${npm_engine:-unspecified (use default)}"
@@ -223,7 +225,11 @@ install_bins() {
   if $PNPM; then
     meta_set "build-step" "install-pnpm"
     echo "Downloading and installing pnpm..."
-    curl -sL https://unpkg.com/@pnpm/self-installer | node
+    if [ -z "$pnpm_engine" ]; then
+      curl -sL https://unpkg.com/@pnpm/self-installer | node
+    else
+      curl -sL https://unpkg.com/@pnpm/self-installer | PNPM_VERSION=$pnpm_engine node
+    fi
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
     echo "pnpm $(pnpm --version) installed"
   fi
