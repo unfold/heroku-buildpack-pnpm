@@ -225,11 +225,10 @@ install_bins() {
   if $PNPM; then
     meta_set "build-step" "install-pnpm"
     echo "Downloading and installing pnpm..."
-    if [ -z "$pnpm_engine" ]; then
-      curl -sL https://unpkg.com/@pnpm/self-installer | node
-    else
-      curl -sL https://unpkg.com/@pnpm/self-installer | PNPM_VERSION=$pnpm_engine node
+    if [ $pnpm_engine ]; then
+      PNPM_VERSION=$pnpm_engine
     fi
+    curl -sL https://unpkg.com/@pnpm/self-installer | node
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
     echo "pnpm $(pnpm --version) installed"
   fi
