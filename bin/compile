@@ -231,7 +231,9 @@ install_bins() {
   if $PNPM || [ -n "$pnpm_engine" ]; then
     meta_set "build-step" "install-pnpm"
     echo "Downloading and installing pnpm..."
-    npm install --global pnpm@"${pnpm_engine:latest}"
+    if ! npm install --global "pnpm@${pnpm_engine:latest}" 2>@1>/dev/null; then
+      echo "Unable to install pnpm ${pnpm_engine:latest}; does it exist?" && false
+    fi
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
     echo "pnpm $(pnpm --version) installed"
   fi
