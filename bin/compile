@@ -186,7 +186,7 @@ if [[ -z "$USE_NPM_INSTALL" ]] && [[ $(features_get_with_blank "use-npm-ci") == 
 fi
 
 install_bins() {
-  local node_engine npm_engine yarn_engine node_version
+  local node_engine npm_engine yarn_engine pnpm_engine node_version
 
   node_engine=$(read_json "$BUILD_DIR/package.json" ".engines.node")
   npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
