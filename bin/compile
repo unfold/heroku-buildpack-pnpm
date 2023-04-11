@@ -208,6 +208,9 @@ install_bins() {
   if $YARN || [ -n "$yarn_engine" ]; then
     echo "engines.yarn (package.json):  ${yarn_engine:-unspecified (use default)}"
   fi
+  if $PNPM || [ -n "$pnpm_engine" ]; then
+    echo "engines.pnpm (package.json):  ${pnpm_engine:-unspecified (use default)}"
+  fi
   echo ""
 
   warn_node_engine "$node_engine"
@@ -222,13 +225,14 @@ install_bins() {
   mcount "version.node.$node_version"
   meta_set "node-version" "$node_version"
 
-  if $PNPM; then
+  # Download pnpm if there is a pnpm-lock.yaml file or if the user
+  # has specified a version of pnpm under "engines". We'll still
+  # only install using pnpm if there is a pnpm-lock.yaml file
+  if $PNPM || [ -n "$pnpm_engine" ]; then
     meta_set "build-step" "install-pnpm"
     echo "Downloading and installing pnpm..."
-    if [ -z "$pnpm_engine" ]; then
-      curl -sL https://unpkg.com/@pnpm/self-installer | node
-    else
-      curl -sL https://unpkg.com/@pnpm/self-installer | PNPM_VERSION=$pnpm_engine node
+    if ! npm install --global "pnpm@${pnpm_engine:latest}" 2>@1>/dev/null; then
+      echo "Unable to install pnpm ${pnpm_engine:latest}; does it exist?" && false
     fi
     pnpm config set store-dir "$CACHE_DIR"/.pnpm-store
     echo "pnpm $(pnpm --version) installed"
