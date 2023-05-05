@@ -221,11 +221,11 @@ should_use_npm_ci() {
   # major_string will be ex: "4." "5." "10"
   local major_string=${npm_version:0:2}
   # strip any "."s from major_string
-  local major=${major_string//.}
+  local major=${major_string//./}
 
   # We should only run `npm ci` if all of the manifest files are there, and we are running at least npm 6.x
   # `npm ci` was introduced in the 5.x line in 5.7.0, but this sees very little usage, < 5% of builds
-  if [[ -f "$build_dir/package.json" ]] && [[ "$(has_npm_lock "$build_dir")" == "true" ]] && (( major >= 6 )); then
+  if [[ -f "$build_dir/package.json" ]] && [[ "$(has_npm_lock "$build_dir")" == "true" ]] && ((major >= 6)); then
     echo "true"
   else
     echo "false"
@@ -306,12 +306,12 @@ npm_prune_devdependencies() {
     meta_set "skipped-prune" "true"
     return 0
   elif [ "$npm_version" == "5.6.0" ] ||
-       [ "$npm_version" == "5.5.1" ] ||
-       [ "$npm_version" == "5.5.0" ] ||
-       [ "$npm_version" == "5.4.2" ] ||
-       [ "$npm_version" == "5.4.1" ] ||
-       [ "$npm_version" == "5.2.0" ] ||
-       [ "$npm_version" == "5.1.0" ]; then
+    [ "$npm_version" == "5.5.1" ] ||
+    [ "$npm_version" == "5.5.0" ] ||
+    [ "$npm_version" == "5.4.2" ] ||
+    [ "$npm_version" == "5.4.1" ] ||
+    [ "$npm_version" == "5.2.0" ] ||
+    [ "$npm_version" == "5.1.0" ]; then
     mcount "skip-prune-issue-npm-5.6.0"
     echo "Skipping because npm $npm_version sometimes fails when running 'npm prune' due to a known issue"
     echo "https://github.com/npm/npm/issues/19356"
@@ -347,7 +347,17 @@ pnpm_prune_devdependencies() {
     return 0
   else
     cd "$build_dir" || return
-    monitor "pnpm-prune" pnpm prune --prod 2>&1
+
+    # Check for monorepo
+    if [ -f "pnpm-workspace.yaml" ] || grep -q '"workspaces":' package.json; then
+      echo "Detected a monorepo, pruning subfolders"
+
+      # Find all package.json files in subfolders and prune them
+      find . -mindepth 2 -name "package.json" -execdir pnpm prune --prod \; 2>&1
+    else
+      monitor "pnpm-prune" pnpm prune --prod 2>&1
+    fi
+
     meta_set "skipped-prune" "false"
   fi
 }

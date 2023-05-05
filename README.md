@@ -8,6 +8,10 @@ It supports pnpm in addition to yarn/npm. As long as the root of your project co
 
 This will run a regular `pnpm install` in the Heroku environment. It will install `devDependencies` initially, regardless of the NODE_ENV setting, and then runs `pnpm prune --prod` during the prune step to remove the `devDependencies`.
 
+If a monorepo is detected (by the presence of a pnpm-workspace.yaml file or a workspaces field in the root package.json file), the buildpack will iterate through all subfolders containing a package.json file and prune their devDependencies using the `pnpm prune --prod` command.
+
+This allows for better slug size optimization in monorepo projects by removing unnecessary devDependencies from subfolders.
+
 The pnpm store will automatically be cached, you do not need to specify additional cache directories manually.
 
 For more information about using this Node.js buildpack on Heroku, see these Dev Center articles:
