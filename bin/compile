@@ -192,6 +192,13 @@ install_bins() {
   npm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.npm")
   yarn_engine=$(read_json "$BUILD_DIR/package.json" ".engines.yarn")
   pnpm_engine=$(read_json "$BUILD_DIR/package.json" ".engines.pnpm")
+  
+  
+  # Respect PNPM_VERSION env variable if defined
+  if [ -n "$PNPM_VERSION" ]; then
+    pnpm_engine="$PNPM_VERSION"
+  fi
+
 
   if [[ "$YARN_2" == "true" && -n "$yarn_engine" ]]; then
     warn "You don't need to specify Yarn engine. Heroku will install the latest Yarn 1.x, so that per project version can be used. More information here: https://yarnpkg.com/getting-started/install#global-install"
