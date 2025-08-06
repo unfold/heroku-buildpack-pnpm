@@ -4,6 +4,12 @@ This is an unofficial buildpack for the official [Heroku buildpack](http://devce
 
 It supports pnpm in addition to yarn/npm. As long as the root of your project contains a `pnpm-lock.yaml` file, PNPM will be used to install all dependencies.
 
+> [!WARNING]
+> The Heroku Node.js buildpack [now supports pnpm itself](https://github.com/heroku/heroku-buildpack-nodejs/pull/1224), and so this pnpm
+> buildpack is no longer required to deploy an app that uses pnpm to Heroku.
+>
+> As such, this buildpack is deprecated and you should no longer use it.
+
 ## Documentation
 
 This will run a regular `pnpm install` in the Heroku environment. It will install `devDependencies` initially, regardless of the NODE_ENV setting, and then runs `pnpm prune --prod` during the prune step to remove the `devDependencies`.
